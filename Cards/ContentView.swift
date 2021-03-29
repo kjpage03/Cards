@@ -9,10 +9,10 @@ import SwiftUI
 
 struct ContentView: View {
     @State var buttonText = "Draw"
-//    @State var cardImages: [UIImage] = [UIImage(named: "DC")!, UIImage(named: "DC")!, UIImage(named: "DC")!, UIImage(named: "DC")!, UIImage(named: "DC")!]
+    //    @State var cardImages: [UIImage] = [UIImage(named: "DC")!, UIImage(named: "DC")!, UIImage(named: "DC")!, UIImage(named: "DC")!, UIImage(named: "DC")!]
     @State var cardImageURLs: [String] = ["https://s3.amazonaws.com/images.penguinmagic.com/images/products/original/5075a.jpg", "https://s3.amazonaws.com/images.penguinmagic.com/images/products/original/5075a.jpg", "https://s3.amazonaws.com/images.penguinmagic.com/images/products/original/5075a.jpg", "https://s3.amazonaws.com/images.penguinmagic.com/images/products/original/5075a.jpg", "https://s3.amazonaws.com/images.penguinmagic.com/images/products/original/5075a.jpg"]
     @State var currentCards: [Card] = []
-    @State var currentHandText: String = "Hand - "
+    @State var currentHandText: String = ""
     @State var highestCard: Card?
     
     
@@ -42,6 +42,7 @@ struct ContentView: View {
             Spacer()
             
             Button(action: {
+                currentHandText = ""
                 buttonText = "Redraw"
                 
                 fetchData()
@@ -55,32 +56,38 @@ struct ContentView: View {
             .cornerRadius(10.0)
             
             Spacer()
-            Button(action: {
-                self.currentHandText = "Hand - \(getHand())"
+            VStack {
+                Button(action: {
+                    self.currentHandText = "\(getHand())"
+                    
+                }, label: {
+                    Text("Evaluate Hand")
+                })
+                .padding()
                 
-            }, label: {
                 Text(currentHandText)
-            })
+            }
             Spacer()
         }
     }
     
     func getHand() -> String {
-        
+        var sortedList: [Int] = []
         //Check for a royal flush
         
         //1 - CHECK FOR A FLUSH
         
-        let firstSuit = currentCards.first!.suit
-        var numberOfMatchingSuits: Int = 0
-        
-        for (index, card) in currentCards.enumerated() {
-            if card.suit == firstSuit {
-                numberOfMatchingSuits += 1
+        if let firstCard = currentCards.first {
+            var numberOfMatchingSuits: Int = 0
+            
+            for (_, card) in currentCards.enumerated() {
+                if card.suit == firstCard.suit {
+                    numberOfMatchingSuits += 1
+                }
+                //            print(index)
+                //            print(numberOfMatchingSuits)
             }
-            //            print(index)
-            //            print(numberOfMatchingSuits)
-        }
+        
         
         let cards = getMatches()
         //        var threeMatching: Int = 0
@@ -91,30 +98,30 @@ struct ContentView: View {
         
         for (value, amount) in cards {
             if amount > 0 {
-//                print("\(value) - \(amount)")
+                //                print("\(value) - \(amount)")
                 finalDictionary.updateValue(amount, forKey: value)
             }
         }
         
         //DETERMINE WHAT HAND WAS DRAWN
-                
+        
         //ROYAL FLUSH
         
         if finalDictionary["ACE"] == 1, finalDictionary["KING"] == 1, finalDictionary["QUEEN"] == 1, finalDictionary["JACK"] == 1, finalDictionary["10"] == 1 {
             
             if numberOfMatchingSuits == 5 {
-            return "Royal Flush"
+                return "Royal Flush"
             } else {
-            return "Straight"
+                return "Straight"
             }
             
-        //CHECK FOR STRAIGHT FLUSH AND STRAIGHT
+            //CHECK FOR STRAIGHT FLUSH AND STRAIGHT
             
         } else {
             var list: [Int] = []
             //FIX THIS
             for (value, _) in finalDictionary {
-            
+                
                 switch value {
                 case "ACE": list.append(Int("14")!)
                     
@@ -128,10 +135,10 @@ struct ContentView: View {
                     list.append(Int("\(value)")!)
                 }
             }
-            let sortedList = list.sorted()
+            sortedList = list.sorted()
             let consecutives = sortedList.map { $0 - 1 }.dropFirst() == sortedList.dropLast()
-//            print(sortedList)
-//            print(consecutives)
+            //            print(sortedList)
+            //            print(consecutives)
             if consecutives == true && sortedList.count == 5 {
                 if numberOfMatchingSuits == 5 {
                     return "Straight Flush"
@@ -160,41 +167,61 @@ struct ContentView: View {
                     
                     
                     if amount == 3 {
-//                        return "3 \(value.lowercased())s"
+                        //                        return "3 \(value.lowercased())s"
                         foundTriplesNames.append(value)
                         foundTriples += 1
                     }
                     
                     
                     if amount == 2 {
-        //                return "Pair of \(value.lowercased())s"
+                        //                return "Pair of \(value.lowercased())s"
                         foundPairsNames.append(value)
                         foundPairs += 1
                     }
-
+                    
                 }
                 if foundPairs == 1 && foundTriples == 1 {
-                    return "Full House - 2 \(foundPairsNames.first!)s and 3 \(foundTriplesNames.first!)s"
+                    return "Full House - 2 \(foundPairsNames.first!.lowercased())s and 3 \(foundTriplesNames.first!.lowercased())s"
                 }
                 if foundPairs == 2 {
-                    return "Two Pairs - \(foundPairsNames.first!)s and \(foundPairsNames[1])s "
+                    return "Two Pairs - \(foundPairsNames.first!.lowercased())s and \(foundPairsNames[1])s "
                 }
                 if foundTriples == 1 && foundPairs == 0 {
-                    return "Three of a kind - \(foundTriplesNames.first!)s"
+                    return "Three of a kind - \(foundTriplesNames.first!.lowercased())s"
                 }
                 if foundPairs == 1 && foundTriples == 0 {
-                    return "Two of a kind - \(foundPairsNames.first!)s"
+                    return "Two of a kind - \(foundPairsNames.first!.lowercased())s"
                 }
                 if foundPairs == 0 && foundTriples == 0 {
-                    return "find the highest card"
+                    var previousCard = Int()
+                    for cardNumber in sortedList {
+                        if cardNumber > previousCard {
+                            previousCard = cardNumber
+                        }
+                    }
+                    
+                    switch previousCard {
+                    case 14: return "High Card - Ace"
+                        
+                    case 13: return "High Card - King"
+                        
+                    case 12: return "High Card - Queen"
+                        
+                    case 11: return "High Card - Jack"
+                        
+                    default:
+                        return "High Card - \(previousCard)"
+                    }
+                    
                 }
                 
             }
             
         }
-        
+        } else {
+            return "Draw a hand first."
+        }
         return ""
-        
     }
     
     func getMatches() -> [String: Int] {
@@ -203,7 +230,7 @@ struct ContentView: View {
         
         //make sure the array runs only once for each card
         var previousMatchedCards: [String] = []
-//        print(currentCards)
+        //        print(currentCards)
         for currentCard in currentCards {
             if !previousMatchedCards.contains(currentCard.value){
                 for card in currentCards {
@@ -216,7 +243,7 @@ struct ContentView: View {
                 }
             }
         }
-//        print(dictionary)
+        //        print(dictionary)
         return dictionary
     }
     
@@ -230,25 +257,25 @@ struct ContentView: View {
                 
                 let response = try? decoder.decode(ResponseObject.self, from: newData)
                 currentCards = response!.cards
-
+                
                 for (index, card) in currentCards.enumerated() {
-//                    let task = URLSession.shared.dataTask(with: URL(string: card.image)!) { (data, response, error) in
-                        //do some investigating in here
-//                        print("START")
-//                        print(card)
-                        cardImageURLs.insert(card.image, at: index)
-                        //                            cardImages.append(UIImage(data: data!)!)
-//                        cardImages.insert(UIImage(data: data!)!, at: index)
-//                        print(card.image)
-//                        print("END")
-//                    }
-//                    task.resume()
+                    //                    let task = URLSession.shared.dataTask(with: URL(string: card.image)!) { (data, response, error) in
+                    //do some investigating in here
+                    //                        print("START")
+                    //                        print(card)
+                    cardImageURLs.insert(card.image, at: index)
+                    //                            cardImages.append(UIImage(data: data!)!)
+                    //                        cardImages.insert(UIImage(data: data!)!, at: index)
+                    //                        print(card.image)
+                    //                        print("END")
+                    //                    }
+                    //                    task.resume()
                 }
-//                print("START CARDS")
-//                print(response?.cards)
-//                print("END CARDS")
-//                print(response?.cards.count)
-//                print(cardImages)
+                //                print("START CARDS")
+                //                print(response?.cards)
+                //                print("END CARDS")
+                //                print(response?.cards.count)
+                //                print(cardImages)
                 
             }
         }
