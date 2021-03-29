@@ -9,12 +9,13 @@ import SwiftUI
 
 struct CardView: View {
     
-    @Binding var image: UIImage
+    @Binding var image: String
     
     var body: some View {
-        Image(uiImage: image)
-            .resizable()
-            .frame(width: 75, height: 100, alignment: .center)
+//        Image(uiImage: image)
+//            .resizable()
+//            .frame(width: 75, height: 100, alignment: .center)
+        ImageView(withURL: image)
     }
 }
 

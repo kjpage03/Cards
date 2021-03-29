@@ -17,6 +17,7 @@
 		1ED00652260811F70047691E /* CardsUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ED00651260811F70047691E /* CardsUITests.swift */; };
 		1ED006662608159E0047691E /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ED006652608159E0047691E /* CardView.swift */; };
 		1ED0066E260828F10047691E /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ED0066D260828F10047691E /* Card.swift */; };
+		1ED0067F260FEFE70047691E /* ImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ED0067E260FEFE70047691E /* ImageLoader.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +54,7 @@
 		1ED00653260811F70047691E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1ED006652608159E0047691E /* CardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
 		1ED0066D260828F10047691E /* Card.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
+		1ED0067E260FEFE70047691E /* ImageLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageLoader.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -108,6 +110,7 @@
 				1ED00633260811F60047691E /* ContentView.swift */,
 				1ED006652608159E0047691E /* CardView.swift */,
 				1ED0066D260828F10047691E /* Card.swift */,
+				1ED0067E260FEFE70047691E /* ImageLoader.swift */,
 				1ED00635260811F60047691E /* Assets.xcassets */,
 				1ED0063A260811F60047691E /* LaunchScreen.storyboard */,
 				1ED0063D260811F60047691E /* Info.plist */,
@@ -274,6 +277,7 @@
 			files = (
 				1ED00630260811F60047691E /* AppDelegate.swift in Sources */,
 				1ED00632260811F60047691E /* SceneDelegate.swift in Sources */,
+				1ED0067F260FEFE70047691E /* ImageLoader.swift in Sources */,
 				1ED0066E260828F10047691E /* Card.swift in Sources */,
 				1ED00634260811F60047691E /* ContentView.swift in Sources */,
 				1ED006662608159E0047691E /* CardView.swift in Sources */,
