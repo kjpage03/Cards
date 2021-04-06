@@ -7,6 +7,8 @@
 
 import Foundation
 
+//MARK: Model Data Structs
+
 struct ResponseObject: Codable {
     var cards: [Card]
 }

@@ -12,15 +12,9 @@ struct CardView: View {
     @Binding var image: String
     
     var body: some View {
-//        Image(uiImage: image)
-//            .resizable()
-//            .frame(width: 75, height: 100, alignment: .center)
+        
         ImageView(withURL: image)
     }
 }
 
-//struct CardView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        CardView()
-//    }
-//}
+
